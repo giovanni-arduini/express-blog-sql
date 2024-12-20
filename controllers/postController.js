@@ -1,27 +1,41 @@
 const posts = require("../data/posts.js");
 const notFound = require("../middlewares/notFound.js");
 
+const connection = require("../data/db.js");
+
 // Functions
 
 //index
+
 function index(req, res) {
-  const tag = req.query.tags;
-  let taggedPosts = posts;
-
-  console.log(taggedPosts);
-
-  if (tag) {
-    console.log(`Ecco la lista dei post con il tag: ${tag}`);
-
-    taggedPosts = posts.filter((post) => post.tags.includes(tag));
-    console.log(taggedPosts);
-  }
-
-  res.json({
-    posts: taggedPosts,
-    count: taggedPosts.length,
+  const sql = `SELECT * FROM posts`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json((error = "Database query failed"));
+    } else {
+      res.json(results);
+    }
   });
 }
+
+// function index(req, res) {
+//   const tag = req.query.tags;
+//   let taggedPosts = posts;
+
+//   console.log(taggedPosts);
+
+//   if (tag) {
+//     console.log(`Ecco la lista dei post con il tag: ${tag}`);
+
+//     taggedPosts = posts.filter((post) => post.tags.includes(tag));
+//     console.log(taggedPosts);
+//   }
+
+//   res.json({
+//     posts: taggedPosts,
+//     count: taggedPosts.length,
+//   });
+// }
 
 //show
 

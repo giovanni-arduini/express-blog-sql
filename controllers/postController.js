@@ -39,14 +39,16 @@ function index(req, res) {
 
 //show
 
-function show(identifier) {
+function show(req, res) {
+  const id = req.params.id;
   const sql = `SELECT * FROM posts WHERE id = ${id}`;
-  return (req, res) => {
-    const post = posts.find(
-      (post) => post[identifier] === req.params[identifier]
-    );
-    res.json(post);
-  };
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json((error = "Database query failed"));
+    } else {
+      res.json(results);
+    }
+  });
 }
 
 /*

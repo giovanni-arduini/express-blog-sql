@@ -33,11 +33,7 @@ router.get(
     req.params.id = parseInt(req.params.id);
     next();
   },
-  (req, res) => {
-    const post = posts.find((post) => post.id === req.params.id);
-    res.json(post);
-  }
-  // postController.show("id")
+  postController.show
 );
 
 router.get(

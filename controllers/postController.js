@@ -40,6 +40,7 @@ function index(req, res) {
 //show
 
 function show(identifier) {
+  const sql = `SELECT * FROM posts WHERE id = ${id}`;
   return (req, res) => {
     const post = posts.find(
       (post) => post[identifier] === req.params[identifier]
@@ -169,26 +170,35 @@ function update(req, res) {
 //destroy
 function destroy(req, res) {
   const id = parseInt(req.params.id);
+  const sql = `DELETE FROM posts WHERE id = ${id}`;
 
-  const post = posts.findIndex((post) => post.id === id);
-  console.log(post);
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json((error = "Database destroy query failed"));
+    } else {
+      res.json(results);
+    }
+  });
 
-  if (!post) {
-    res.status(404);
-    result = {
-      error: "Post not found",
-      message: "Il post non è stato trovato",
-    };
-    res.send(result);
+  // const post = posts.findIndex((post) => post.id === id);
+  // console.log(post);
 
-    return;
-  }
+  // if (!post) {
+  //   res.status(404);
+  //   result = {
+  //     error: "Post not found",
+  //     message: "Il post non è stato trovato",
+  //   };
+  //   res.send(result);
 
-  posts.splice(post, 1);
+  //   return;
+  // }
 
-  console.log(posts);
-  console.log(`Elimina il post con id ${id}`);
-  res.sendStatus(204);
+  // posts.splice(post, 1);
+
+  // console.log(posts);
+  // console.log(`Elimina il post con id ${id}`);
+  // res.sendStatus(204);
 }
 
 module.exports = { index, show, store, modify, update, destroy };
